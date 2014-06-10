@@ -12,12 +12,9 @@ module Devise
         true
       end
 
-      def generate_two_factor_code
-        self.class.login_code_random_pattern.gen
-      end
-
-      def send_two_factor_authentication_code(code)
-        p "Code is #{code}"
+      def send_two_factor_authentication_code
+        # p "Code is #{code}"
+        otp_secret_key
       end
 
       def max_login_attempts?
