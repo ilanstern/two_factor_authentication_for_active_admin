@@ -12,9 +12,9 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
       sign_in resource_name, resource, :bypass => true
       redirection_path = 
         if ActiveRecord::Base.connection.table_exists? 'current_namespaces' and CurrentNamespace.count > 0 and !Rails.env.development?
-          CurrentNamespace.first.current_namespace.to_sym || :admin
+          CurrentNamespace.first.current_namespace.to_sym || "/admin"
         else
-          :admin
+          "/admin"
         end
       redirect_to stored_location_for(resource_name) || redirection_path
       resource.update_attribute(:second_factor_attempts_count, 0)
