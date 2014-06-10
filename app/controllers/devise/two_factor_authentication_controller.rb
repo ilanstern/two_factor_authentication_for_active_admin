@@ -10,7 +10,7 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
     if resource.authenticate_otp(params[:code], drift: 60) 
       warden.session(resource_name)[:need_two_factor_authentication] = false
       sign_in resource_name, resource, :bypass => true
-      redirect_to stored_location_for(resource_name) || ActiveAdmin.application.default_namespace || :root
+      redirect_to stored_location_for(resource_name) || :root
       resource.update_attribute(:second_factor_attempts_count, 0)
     else
       resource.second_factor_attempts_count += 1
