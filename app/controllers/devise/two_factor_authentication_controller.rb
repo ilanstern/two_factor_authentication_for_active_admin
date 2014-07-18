@@ -3,10 +3,10 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
   before_filter :prepare_and_validate, :handle_two_factor_authentication
 
   def show
+    sign_out(resource) and return if params[:code].nil?
   end
 
   def update
-    render :show and return if params[:code].nil?
     if resource.authenticate_otp(params[:code], drift: 60) 
       warden.session(resource_name)[:need_two_factor_authentication] = false
       sign_in resource_name, resource, :bypass => true
