@@ -3,7 +3,11 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
   before_filter :prepare_and_validate, :handle_two_factor_authentication
 
   def show
-    sign_out(resource) and return if params[:code].nil?
+    if not resource.nil? and params[:code].nil?
+      respond_with(resource)
+    else
+      redirect_to :root
+    end
   end
 
   def update
@@ -26,7 +30,7 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
         sign_out(resource)
         render :template => 'devise/two_factor_authentication/max_login_attempts_reached' and return
       else
-        render :show
+        respond_with(resource)
       end
     end
   end
