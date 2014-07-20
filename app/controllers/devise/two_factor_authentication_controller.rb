@@ -1,6 +1,7 @@
 class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::SessionsController # DeviseController
-  prepend_before_filter :authenticate_scope!
-  before_filter :prepare_and_validate, :handle_two_factor_authentication
+  skip_before_filter    :handle_password_change
+  before_filter         :prepare_and_validate,  :handle_two_factor_authentication
+  prepend_before_filter :authenticate_scope!,   :only => [:show, :update]
 
   def show
   end
@@ -35,6 +36,7 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
   private
 
     def authenticate_scope!
+      send(:"authenticate_#{resource_name}!")
       self.resource = send("current_#{resource_name}")
     end
 
@@ -43,7 +45,7 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
       @limit = resource.class.max_login_attempts
       if resource.max_login_attempts?
         sign_out(resource)
-        render :template => 'devise/two_factor_authentication/max_login_attempts_reached' and return
+        render :max_login_attempts_reached
       end
     end
 end
