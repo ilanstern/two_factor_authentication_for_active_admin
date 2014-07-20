@@ -1,5 +1,5 @@
 class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::SessionsController # DeviseController
-  skip_before_filter    :handle_password_change
+  Devise::SessionsController.skip_before_filter :handle_password_change
   before_filter         :prepare_and_validate,  :handle_two_factor_authentication
   prepend_before_filter :authenticate_scope!,   :only => [:show, :update]
 
