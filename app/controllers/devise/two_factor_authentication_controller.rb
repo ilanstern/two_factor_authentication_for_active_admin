@@ -3,14 +3,11 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
   before_filter :prepare_and_validate, :handle_two_factor_authentication
 
   def show
-    if not resource.nil? and params[:code].nil?
-      respond_with(resource)
-    else
-      redirect_to :root
-    end
   end
 
   def update
+    render :show and return if params[:code].nil?
+
     if resource.authenticate_otp(params[:code], drift: 60) 
       warden.session(resource_name)[:need_two_factor_authentication] = false
       sign_in resource_name, resource, :bypass => true
@@ -25,12 +22,12 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
     else
       resource.second_factor_attempts_count += 1
       resource.save
-      set_flash_message :error, :attempt_failed
+      flash.now[:error] = find_message(:attempt_failed)
       if resource.max_login_attempts?
         sign_out(resource)
-        render :template => 'devise/two_factor_authentication/max_login_attempts_reached' and return
+        render :max_login_attempts_reached
       else
-        respond_with(resource)
+        render :show
       end
     end
   end
