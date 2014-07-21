@@ -34,6 +34,10 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
     end
   end
 
+  def devise_controller?
+    true
+  end
+
   private
 
     def authenticate_scope!
