@@ -15,7 +15,7 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
       sign_in resource_name, resource, :bypass => true
       redirection_path = 
         if ActiveRecord::Base.connection.table_exists? 'current_namespaces' and CurrentNamespace.count > 0
-          Rails.application.routes.url_helpers.send("#{CurrentNamespace.last.current_namespace}_root_path") || "/admin"
+          "/#{CurrentNamespace.last.current_namespace}")
         else
           "/admin"
         end
