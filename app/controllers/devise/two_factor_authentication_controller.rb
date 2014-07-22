@@ -19,7 +19,7 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
         else
           "/admin"
         end
-      redirect_to stored_location_for(resource_name) || :root
+      redirect_to stored_location_for(resource_name) || redirection_path
       resource.update_attribute(:second_factor_attempts_count, 0)
     else
       resource.second_factor_attempts_count += 1
