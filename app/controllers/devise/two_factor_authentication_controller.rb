@@ -26,6 +26,12 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
       resource.save
       flash.now[:error] = find_message(:attempt_failed)
       if resource.max_login_attempts?
+
+        if Rails.env.production?
+          ExceptionNotifier.notify_exception(Exception.new("User locked by failed 2 step password attempts: #{current_admin_user.username}"))
+        end
+
+
         sign_out(resource)
         render :max_login_attempts_reached
       else
