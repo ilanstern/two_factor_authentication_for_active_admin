@@ -28,7 +28,7 @@ class Devise::TwoFactorAuthenticationController <  ActiveAdmin::Devise::Sessions
       if resource.max_login_attempts?
 
         if Rails.env.production?
-          ExceptionNotifier.notify_exception(Exception.new("User locked by failed 2 step password attempts: #{current_admin_user.username}"))
+          ExceptionNotifier.notify_exception(Exception.new("User locked by failed 2 step password attempts: #{resource.username}"))
         end
 
 
